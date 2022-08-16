@@ -1,7 +1,13 @@
 import sys
 import csv
 import json
+import os
 import fcd
+import tensorflow as tf
+
+#Disable different Tensorflow error messages/outputs
+tf.get_logger().setLevel('INFO')
+
 
 input_file = sys.argv[1]
 output_file = sys.argv[2]
@@ -24,8 +30,6 @@ can_smiles1 = [smi for smi in fcd.canonical_smiles(smiles_list1) if ((smi is not
 can_smiles2 = [smi for smi in fcd.canonical_smiles(smiles_list2) if ((smi is not None))]
 
 #Make prediction using default ChemNet model
-print(can_smiles1)
-print(can_smiles2)
 fcd_score = fcd.get_fcd(can_smiles1, can_smiles2)
 
 #Write output
