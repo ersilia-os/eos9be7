@@ -59,25 +59,33 @@ class Model(object):
     def set_framework_dir(self, dest):
         self.framework_dir = os.path.abspath(dest)
 
-    def predict(self, smiles_list): # <-- EDIT: rename if model does not do predictions (e.g. it does calculations)
+    def calculate(self, list_of_lists): # <-- EDIT: rename if model does not do predictions (e.g. it does calculations)
         tmp_folder = tempfile.mkdtemp(prefix="eos-")
         data_file = os.path.join(tmp_folder, self.DATA_FILE)
         output_file = os.path.join(tmp_folder, self.OUTPUT_FILE)
         log_file = os.path.join(tmp_folder, self.LOG_FILE)
-        with open(data_file, "w") as f:
-            f.write("smiles"+os.linesep)
-            for smiles in smiles_list:
-                f.write(smiles+os.linesep)
+
+        #Assumes list_of_lists contains at least two lists
+        smiles_list1 = list_of_lists[0]
+        smiles_list2 = list_of_lists[1]
+        
+        #Assumes data file is in csv format
+        with open(data_file, "w") as f: 
+            writer = csv.writer(f)
+            fieldnames = ["smiles1", "smiles2"]
+            writer.writerow(fieldnames)
+            writer.writerows(zip(smiles_list1, smiles_list2))
+            
         run_file = os.path.join(tmp_folder, self.RUN_FILE)
         with open(run_file, "w") as f:
             lines = [
-                "bash {0}/run_predict.sh {0} {1} {2}".format( # <-- EDIT: match method name (run_predict.sh, run_calculate.sh, etc.)
+                "bash {0}/run_calculate.sh {0} {1} {2}".format( # <-- EDIT: match method name (run_predict.sh, run_calculate.sh, etc.)
                     self.framework_dir,
                     data_file,
                     output_file
                 )
             ]
-            f.write(os.linesep.join(lines))
+            f.write(os.linesep.join(lines)) #Writes command that is run to self.RUN_FILE
         cmd = "bash {0}".format(run_file)
         with open(log_file, "w") as fp:
             subprocess.Popen(
@@ -148,10 +156,10 @@ class Artifact(BentoServiceArtifact):
 
 
 @artifacts([Artifact("model")])
-class Service(BentoService):
+class Service(BentoService): 
     @api(input=JsonInput(), batch=True)
-    def predict(self, input: List[JsonSerializable]): # <-- EDIT: rename if necessary 
+    def calculate(self, input: List[JsonSerializable]): # <-- EDIT: rename if necessary
         input = input[0]
-        smiles_list = [inp["input"] for inp in input]
-        output = self.artifacts.model.predict(smiles_list) # <-- EDIT: rename if necessary
+        list_of_lists = [inp["input"] for inp in input] #Assumes input is in format of list of lists
+        output = self.artifacts.model.calculate(list_of_lists) # <-- EDIT: rename if necessary
         return [output]
