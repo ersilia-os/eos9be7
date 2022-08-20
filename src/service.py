@@ -12,6 +12,7 @@ import collections
 import tempfile
 import subprocess
 import csv
+import json
 
 CHECKPOINTS_BASEDIR = "checkpoints"
 FRAMEWORK_BASEDIR = "framework"
@@ -27,24 +28,9 @@ def Float(x):
     except:
         return None
     
-def String(x):
-    x = str(x)
-    if not x:
-        return None
-    if x == "nan":
-        return None
-    if x == "null":
-        return None
-    if x == "False":
-        return None
-    if x == "None":
-        return None
-    return x
-
-
 class Model(object):
     def __init__(self):
-        self.DATA_FILE = "_data.csv"
+        self.DATA_FILE = "_data.json"
         self.OUTPUT_FILE = "_output.csv"
         self.RUN_FILE = "_run.sh"
         self.LOG_FILE = "run.log"
@@ -65,16 +51,8 @@ class Model(object):
         output_file = os.path.join(tmp_folder, self.OUTPUT_FILE)
         log_file = os.path.join(tmp_folder, self.LOG_FILE)
 
-        #Assumes list_of_lists contains at least two lists
-        smiles_list1 = list_of_lists[0]
-        smiles_list2 = list_of_lists[1]
-        
-        #Assumes data file is in csv format
-        with open(data_file, "w") as f: 
-            writer = csv.writer(f)
-            fieldnames = ["smiles1", "smiles2"]
-            writer.writerow(fieldnames)
-            writer.writerows(zip(smiles_list1, smiles_list2))
+        with open(data_file, "w") as f:
+            json.dump(list_of_lists, f, indent=4)
             
         run_file = os.path.join(tmp_folder, self.RUN_FILE)
         with open(run_file, "w") as f:
