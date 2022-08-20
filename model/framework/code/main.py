@@ -11,29 +11,18 @@ tf.get_logger().setLevel('INFO')
 
 input_file = sys.argv[1]
 output_file = sys.argv[2]
-smiles_list1_orig = []
-smiles_list2_orig = []
 
 with open(input_file, "r") as f:
-    reader = csv.reader(f)
-    next(reader)
-    for row in reader:
-        smiles_list1_orig.append(row[0])
-        smiles_list2_orig.append(row[1])
-        
-#Filter empty strings
-smiles_list1 = [smi for smi in smiles_list1_orig if smi]
-smiles_list2 = [smi for smi in smiles_list2_orig if smi]
+    data = json.load(f)
 
-#Get canonical smiles and filter invalid ones
-can_smiles1 = [smi for smi in fcd.canonical_smiles(smiles_list1) if ((smi is not None))]
-can_smiles2 = [smi for smi in fcd.canonical_smiles(smiles_list2) if ((smi is not None))]
+fcd_scores = []
+for d in data:
+    can_smiles1 = [smi for smi in fcd.canonical_smiles(d[0]) if ((smi is not None))]
+    can_smiles2 = [smi for smi in fcd.canonical_smiles(d[1]) if ((smi is not None))]
+    fcd_scores += [fcd.get_fcd(can_smiles1, can_smiles2)]
 
-#Make prediction using default ChemNet model
-fcd_score = fcd.get_fcd(can_smiles1, can_smiles2)
-
-#Write output
 with open(output_file, 'w') as f:
     writer = csv.writer(f)
-    writer.writerow(["fcd_score"]) # header
-    writer.writerow([fcd_score])
+    writer.writerow(["fcd_score"])
+    for fcd_score in fcd_scores:
+        writer.writerow([fcd_score])
