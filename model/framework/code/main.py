@@ -5,9 +5,7 @@ import os
 import fcd
 import tensorflow as tf
 
-#Disable different Tensorflow error messages/outputs
 tf.get_logger().setLevel('INFO')
-
 
 input_file = sys.argv[1]
 output_file = sys.argv[2]
