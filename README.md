@@ -1,31 +1,40 @@
-# Frechet Chemnet Distance
-## Model identifiers
-- Slug: chemnet-distance
-- Ersilia ID: eos9be7
-- Tags: generative, distance, similarity
+# FCD: Fréchet ChemNet Distance to evaluate generative models
 
-# Model description
-- Input: A pair of SMILES lists. Ideally, one list represents training data and the other list represents a generated 
-- Output: Frechet ChemNet Distance (FCD) score. This metric incorporates biological and chemical properties to compare generative model outputs to training data. A lower FCD means that generated molecules are similar to those in the training set. 
-- Model type: N/A
-- Training set: The distance is based on ChemNet, a model trained on approximately 500,000 molecules to predict 6000 assays in ChEMBL, ZINC, and PubChem. Further training details may be found in [this paper](https://pubs.rsc.org/en/content/articlelanding/2018/sc/c8sc00148k).
-- Mode of training: Pretrained
+The Fréchet ChemNet distance is a metric to evaluate generative models. It unifies, in a single score, whether the generated molecules are valid according to chemical and biological properties as well as their diversity from the training set. The score measures the Fréchet Inception Distance between molecules represented by ChemNet, a deep neural network trained to predict biological and chemical properties of small molecules. 
 
-# Source code
-Preuer, K., Renz, P., Unterthiner, T., Hochreiter, S. & Klambauer, G. Fréchet ChemNet Distance: A Metric for Generative Models for Molecules in Drug Discovery. J. Chem. Inf. Model. 58, 1736–1741 (2018).
+## Identifiers
 
-- Code: https://github.com/bioinf-jku/FCD
-- Checkpoints: N/A
+* EOS model ID: `eos9be7`
+* Slug: `chemnet-distance`
 
-# License
-The GPL-v3 license applies to all parts of the repository that are not externally maintained libraries. This repository uses the externally maintained library "fcd," located at [/model/framework](/model/framework) and licensed under a [LGPL-3.0 license](/model/framework/README.md)
+## Characteristics
 
+* Input: `Compound`
+* Input Shape: `Pair of Lists`
+* Task: `Generative`
+* Output: `Distance`
+* Output Type: `Float`
+* Output Shape: `Single`
+* Interpretation: Frechet ChemNet Distance (FCD). Higher FCD indicates higher difference to the training set
 
-# History 
-- The model was downloaded on 8/11/2022.
-- The model was incorporated on 8/16/2022.
+## References
 
-# About us
+* [Publication](https://pubs.acs.org/doi/10.1021/acs.jcim.8b00234)
+* [Source Code](https://github.com/bioinf-jku/FCD)
+* Ersilia contributor: [brosular](https://github.com/brosular)
+
+## Citation
+
+If you use this model, please cite the [original authors](https://pubs.acs.org/doi/10.1021/acs.jcim.8b00234) of the model and the [Ersilia Model Hub](https://github.com/ersilia-os/ersilia/blob/master/CITATION.cff).
+
+## License
+
+This package is licensed under a GPL-3.0 license. The model contained within this package is licensed under a LGPL-3.0 license.
+
+Notice: Ersilia grants access to these models 'as is' provided by the original authors, please refer to the original code repository and/or publication if you use the model in your research.
+
+## About Us
+
 The [Ersilia Open Source Initiative](https://ersilia.io) is a Non Profit Organization ([1192266](https://register-of-charities.charitycommission.gov.uk/charity-search/-/charity-details/5170657/full-print)) with the mission is to equip labs, universities and clinics in LMIC with AI/ML tools for infectious disease research.
 
-[Help us](https://www.ersilia.io/donate) achieve our mission or [volunteer](https://www.ersilia.io/volunteer) with us!
+[Help us](https://www.ersilia.io/donate) achieve our mission!
