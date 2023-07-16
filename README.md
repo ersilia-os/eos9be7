@@ -23,6 +23,9 @@ The Fréchet ChemNet distance is a metric to evaluate generative models. It unif
 * [Source Code](https://github.com/bioinf-jku/FCD)
 * Ersilia contributor: [brosular](https://github.com/brosular)
 
+## Ersilia model URLs
+* [GitHub](https://github.com/ersilia-os/eos9be7)
+
 ## Citation
 
 If you use this model, please cite the [original authors](https://pubs.acs.org/doi/10.1021/acs.jcim.8b00234) of the model and the [Ersilia Model Hub](https://github.com/ersilia-os/ersilia/blob/master/CITATION.cff).
