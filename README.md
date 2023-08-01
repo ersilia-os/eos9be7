@@ -11,7 +11,7 @@ The Fréchet ChemNet distance is a metric to evaluate generative models. It unif
 
 * Input: `Compound`
 * Input Shape: `Pair of Lists`
-* Task: `Generative`
+* Task: `Similarity`
 * Output: `Distance`
 * Output Type: `Float`
 * Output Shape: `Single`

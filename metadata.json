@@ -10,7 +10,7 @@
     ],
     "Input Shape": "Pair of Lists",
     "Task": [
-        "Generative"
+        "Similarity"
     ],
     "Output": [
         "Distance"
