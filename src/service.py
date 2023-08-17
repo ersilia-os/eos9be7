@@ -31,7 +31,6 @@ def Float(x):
 class Model(object):
     def __init__(self):
         self.DATA_FILE = "_data.csv"
-        self.DATA_JSON = "_dataa.json"
         self.OUTPUT_FILE = "_output.csv"
         self.RUN_FILE = "_run.sh"
         self.LOG_FILE = "run.log"
@@ -46,30 +45,24 @@ class Model(object):
     def set_framework_dir(self, dest):
         self.framework_dir = os.path.abspath(dest)
 
-    def run(self, data_dict): # <-- EDIT: rename if model does not do predictions (e.g. it does calculations)
+    def run(self, list_of_lists): # <-- EDIT: rename if model does not do predictions (e.g. it does calculations)
         tmp_folder = tempfile.mkdtemp(prefix="eos-")
         data_file = os.path.join(tmp_folder, self.DATA_FILE)
-        data_json = os.path.join(tmp_folder, self.DATA_JSON)
         output_file = os.path.join(tmp_folder, self.OUTPUT_FILE)
         log_file = os.path.join(tmp_folder, self.LOG_FILE)
-		
-        data = []
-        with open(data_file, "r") as f:
-            reader = csv.reader(f)
-            headers = next(reader)  # Read the header row
-
-            for row in reader:
-                data.extend(row[0].split('.'))
-
-        data_dict = {"smiles_1": [], "smiles_2": []}
-        for i in range(0, len(data), 2):
-            data_dict["smiles_1"].append(data[i])
-            data_dict["smiles_2"].append(data[i + 1])
-
-
-        with open(data_json, "w") as f:
-            json.dump(data_dict, f, indent=4)
-            
+        print("input file", list_of_lists)
+        print("output file", output_file)
+        print("data file", data_file)
+        # with open(data_file, "w") as f:
+            # json.dump(list_of_lists, f, indent=4)
+			
+			
+        with open(data_file, "w", newline="") as f:
+            csv_writer = csv.writer(f)
+            csv_writer.writerows(list_of_lists)
+			
+        
+        print("input file after dumping", data_file)
         run_file = os.path.join(tmp_folder, self.RUN_FILE)
         with open(run_file, "w") as f:
             lines = [

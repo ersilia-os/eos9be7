@@ -19,8 +19,11 @@ def replace_zero_with_none(array):
 
 input_file = sys.argv[1]
 output_file = sys.argv[2]
+print(input_file)
 
-df = pd.read_csv(input_file )
+#df = pd.read_csv(input_file )
+df = pd.read_csv(input_file, names=['smiles_1', 'smiles_2'])
+print("dataframe", df.columns)
 smiles_lists = df.apply(lambda row: [row['smiles_1'].split('.'), row['smiles_2'].split('.')], axis=1)
 print(smiles_lists)
 
