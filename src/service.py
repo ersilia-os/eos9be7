@@ -55,6 +55,12 @@ class Model(object):
         print("data file", data_file)
         # with open(data_file, "w") as f:
             # json.dump(list_of_lists, f, indent=4)
+        
+        list_of_lists = {"smiles_1": [], "smiles_2": []}
+        list_of_lists = [
+            ["CC1C2C(CC3(C=CC(=O)C(=C3C2OC1=O)C)C)O.C1=CN=CC=C1C(=O)NN", "CC(CN1C=NC2=C(N=CN=C21)N)OCP(=O)(O)O"],
+            ["CC(=O)OC1=CC=CC=C1C(=O)O.CC(C)CC1=CC=C(C=C1)C(C)C(=O)O", "CC1(OC2C(OC(C2O1)(C#N)C3=CC=C4N3N=CN=C4N)CO)C.COC1=CC23CCCN2CCC4=CC5=C(C=C4C3C1O)OCO5"]
+]
 			
 			
         with open(data_file, "w", newline="") as f:
@@ -78,6 +84,7 @@ class Model(object):
             subprocess.Popen(
                 cmd, stdout=fp, stderr=fp, shell=True, env=os.environ
             ).wait()
+        print("output_file",output_file)
         with open(output_file, "r") as f:
             reader = csv.reader(f)
             h = next(reader)
