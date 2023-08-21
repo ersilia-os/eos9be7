@@ -30,7 +30,7 @@ def Float(x):
     
 class Model(object):
     def __init__(self):
-        self.DATA_FILE = "_data.json"
+        self.DATA_FILE = "_data.csv"
         self.OUTPUT_FILE = "_output.csv"
         self.RUN_FILE = "_run.sh"
         self.LOG_FILE = "run.log"
@@ -45,19 +45,32 @@ class Model(object):
     def set_framework_dir(self, dest):
         self.framework_dir = os.path.abspath(dest)
 
-    def calculate(self, list_of_lists): # <-- EDIT: rename if model does not do predictions (e.g. it does calculations)
+    def run(self, list_of_lists): # <-- EDIT: rename if model does not do predictions (e.g. it does calculations)
         tmp_folder = tempfile.mkdtemp(prefix="eos-")
         data_file = os.path.join(tmp_folder, self.DATA_FILE)
         output_file = os.path.join(tmp_folder, self.OUTPUT_FILE)
         log_file = os.path.join(tmp_folder, self.LOG_FILE)
-
-        with open(data_file, "w") as f:
-            json.dump(list_of_lists, f, indent=4)
-            
+        print("input file", list_of_lists)
+        print("output file", output_file)
+        print("data file", data_file)
+        
+        # list_of_lists = {"smiles_1": [], "smiles_2": []}
+        # list_of_lists = [
+            # ["CC1C2C(CC3(C=CC(=O)C(=C3C2OC1=O)C)C)O.C1=CN=CC=C1C(=O)NN", "CC(CN1C=NC2=C(N=CN=C21)N)OCP(=O)(O)O"],
+            # ["CC(=O)OC1=CC=CC=C1C(=O)O.CC(C)CC1=CC=C(C=C1)C(C)C(=O)O", "CC1(OC2C(OC(C2O1)(C#N)C3=CC=C4N3N=CN=C4N)CO)C.COC1=CC23CCCN2CCC4=CC5=C(C=C4C3C1O)OCO5"]
+# ]
+			
+			
+        with open(data_file, "w", newline="") as f:
+            csv_writer = csv.writer(f)
+            csv_writer.writerows(list_of_lists)
+			
+        
+        print("input file after dumping", data_file)
         run_file = os.path.join(tmp_folder, self.RUN_FILE)
         with open(run_file, "w") as f:
             lines = [
-                "bash {0}/run_calculate.sh {0} {1} {2}".format( # <-- EDIT: match method name (run_predict.sh, run_calculate.sh, etc.)
+                "bash {0}/run.sh {0} {1} {2}".format( # <-- EDIT: match method name (run_predict.sh, run_calculate.sh, etc.)
                     self.framework_dir,
                     data_file,
                     output_file
@@ -69,6 +82,7 @@ class Model(object):
             subprocess.Popen(
                 cmd, stdout=fp, stderr=fp, shell=True, env=os.environ
             ).wait()
+        print("output_file",output_file)
         with open(output_file, "r") as f:
             reader = csv.reader(f)
             h = next(reader)
@@ -136,8 +150,8 @@ class Artifact(BentoServiceArtifact):
 @artifacts([Artifact("model")])
 class Service(BentoService): 
     @api(input=JsonInput(), batch=True)
-    def calculate(self, input: List[JsonSerializable]): # <-- EDIT: rename if necessary
+    def run(self, input: List[JsonSerializable]): # <-- EDIT: rename if necessary
         input = input[0]
         list_of_lists = [inp["input"] for inp in input] #Assumes input is in format of list of lists
-        output = self.artifacts.model.calculate(list_of_lists) # <-- EDIT: rename if necessary
+        output = self.artifacts.model.run(list_of_lists) # <-- EDIT: rename if necessary
         return [output]
