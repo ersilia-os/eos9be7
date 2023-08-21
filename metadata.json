@@ -28,5 +28,11 @@
     "Publication": "https://pubs.acs.org/doi/10.1021/acs.jcim.8b00234",
     "Source Code": "https://github.com/bioinf-jku/FCD",
     "License": "LGPL-3.0",
-    "Contributor": "brosular"
+    "Contributor": "brosular",
+    "S3": "https://ersilia-models-zipped.s3.eu-central-1.amazonaws.com/eos9be7.zip",
+    "DockerHub": "https://hub.docker.com/r/ersiliaos/eos9be7",
+    "Docker Architecture": [
+        "AMD64",
+        "ARM64"
+    ]
 }
