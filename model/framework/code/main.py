@@ -2,7 +2,7 @@ import sys
 import csv
 import json
 import os
-import fcd
+from fcd import canonical, get_fcd
 import numpy as np
 import warnings
 import pandas as pd
@@ -24,11 +24,11 @@ print(smiles_lists)
 fcd_scores = []
 count =0
 for d in smiles_lists:
-    can_smiles1 = [fcd.canonical(smi) for smi in d[0] if smi is not None]
-    can_smiles2 = [fcd.canonical(smi) for smi in d[1] if smi is not None]
+    can_smiles1 = [canonical(smi) for smi in d[0] if smi is not None]
+    can_smiles2 = [canonical(smi) for smi in d[1] if smi is not None]
    
     try:
-        fcd_score = fcd.get_fcd(can_smiles1, can_smiles2)
+        fcd_score = get_fcd(can_smiles1, can_smiles2)
         print(fcd_score)
 
     except (ValueError, ZeroDivisionError):
