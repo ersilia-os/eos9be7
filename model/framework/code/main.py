@@ -3,13 +3,10 @@ import csv
 import json
 import os
 import fcd
-import tensorflow as tf
 import numpy as np
 import warnings
 import pandas as pd
 warnings.filterwarnings('ignore')
-
-tf.get_logger().setLevel('INFO')
 
 
 def replace_zero_with_none(array):
